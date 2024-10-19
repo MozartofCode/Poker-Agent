@@ -3,8 +3,10 @@
 # 
 #
 
+
 import random
 
+# value has to be a number assign Ace etc a number as well #TODO
 class Card:
     def __init__(self, suit, value):
         self.suit = suit
@@ -35,14 +37,10 @@ class Deck:
 
 
 
+class Game:
+    def __init__(self):
+        # Initilize the deck, RL bot and monte carlo bot
+        return
 
-    # Dealing one card from the deck
-    # :return: the card or None if not possible
-    def deal_card(self):
-        if len(self.cards) > 0:
-            return self.cards.pop()
-        else:
-            return None
-    
-
-
+    def play(self):
+        return
