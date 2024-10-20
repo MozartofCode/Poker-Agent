@@ -42,7 +42,7 @@ class Deck:
 
 
 
-class Game:
+class PokerEnv:
     def __init__(self):
         # Initilize the deck, RL bot and monte carlo bot
         return
