@@ -1,14 +1,18 @@
 # @Author: Bertan Berker
 # @Language: Python
 # This is a simple bot that plays poker and makes decision based on the Monte Carlo simulation
-
+# A simple bluffing and betting logic is implemented where positional play could be implemented later on
 
 import random
 from hand_evaluation import choose_winner
 from gameplay import Deck
 
 
-# Algorithm run over a 1000 times to simulate the game
+# This is the implementation of the Monte Carlo Simulation on Texas Hold'em
+# :my_hand: The hand of the bot
+# :opponent_hand: The hand of the opponent
+# :community_cards: The cards on the table
+# :num_simulations: The number of simulations to run
 # :return: The percentage of the time the bot wins over 1000 simulations
 def monte_carlo_simulation(my_hand, opponent_hand, community_cards, num_simulations=1000):
 
@@ -39,52 +43,49 @@ def monte_carlo_simulation(my_hand, opponent_hand, community_cards, num_simulati
     return 100 * (wins / num_simulations)
 
 
-
-
-
-# Action Threshold
-# <=30% - Fold
-# 30% - <=60% - Call/Check
-# 60% - <=90% - Raise
-# >90% - All in
-# Occasional bluffing is also implemented
-# Risk Factor is about how much the bot is willing to take risks, how agressive it will play
-
+# This is the implementation of the bot's decision making process
+# :my_hand: The hand of the bot
+# :opponent_hand: The hand of the opponent
+# :community_cards: The cards on the table
+# :pot_size: The size of the pot on the table
+# :risk_factor: The risk factor of the bot (Depends on the bot's risk tolerance)
+# :return: The decision of the bot
 def make_decision(my_hand, opponent_hand, community_cards, pot_size, risk_factor = 1.0):
 
     possibility = monte_carlo_simulation(my_hand, opponent_hand, community_cards)
-
-    # Tune thresholds based on bot's risk tolerance (default = 1.0)
+    
+    # Action Threshold
+    # <=30% - Fold
+    # 30% - <=60% - Call/Check
+    # 60% - <=90% - Raise
+    # >90% - All in
     fold_threshold = 0.3 * risk_factor
     call_threshold = 0.6 * risk_factor
     raise_threshold = 0.9 * risk_factor
 
     if possibility <= fold_threshold:
-
         if should_bluff():
             return 'Raise' + str(int(pot_size * random.randint(5, 10)))
 
         return 'Fold'
     
-    if possibility > fold_threshold and possibility <= call_threshold:
+    elif possibility > fold_threshold and possibility <= call_threshold:
         return 'Call/Check'
     
-    if possibility > call_threshold and possibility <= raise_threshold:
+    elif possibility > call_threshold and possibility <= raise_threshold:
         # Always raises %20 of the pot size    
         return 'Raise' + str(int(pot_size * 0.2))
     
-    if possibility >= raise_threshold:
+    elif possibility > raise_threshold:
         return 'All-in'
     
     return 'Fold'
 
 
+# This is the implementation of the bot's bluffing logic
+# :bluff_chance: The chance of the bot to bluff
+# :return: True if the bot should bluff, False otherwise
 def should_bluff(bluff_chance=8):
     if random.randint(0, 10) <= bluff_chance:
         return True
     return False
-
-
-
-
-
