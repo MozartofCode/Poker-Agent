@@ -79,7 +79,7 @@ class DQNAgent:
 
 # Main training loop
 def train_poker_agent(episodes):
-    env = PokerEnv()  # Your custom poker environment
+    env = PokerEnv()
     state_size = env.observation_space.shape[0]
     action_size = env.action_space.n
     agent = DQNAgent(state_size, action_size)
@@ -106,5 +106,5 @@ def train_poker_agent(episodes):
     env.close()
 
 # Start training
-train_poker_agent(1000)  # Number of training episodes
+train_poker_agent(1000)
 
