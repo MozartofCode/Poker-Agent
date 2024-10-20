@@ -12,6 +12,12 @@ import random
 from collections import deque
 from gameplay import PokerEnv, Card, Deck
 
+# RL Bot
+class RL_Bot:
+    def __init__(self, money):
+        self.money = money
+        
+
 # DQN Network
 class DQN(nn.Module):
     def __init__(self, input_dim, output_dim):

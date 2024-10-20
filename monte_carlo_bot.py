@@ -8,6 +8,17 @@ from hand_evaluation import choose_winner
 from gameplay import Deck
 
 
+# This is the Monte Carlo Bot class
+class Monte_Carlo_Bot:
+    
+    def __init__(self, money, risk_factor=1.0):
+        self.risk_factor = risk_factor
+        self.money = money
+
+    def make_decision(self, my_hand, opponent_hand, community_cards, pot_size):
+        return make_decision(my_hand, opponent_hand, community_cards, pot_size, self.risk_factor)
+
+
 # This is the implementation of the Monte Carlo Simulation on Texas Hold'em
 # :my_hand: The hand of the bot
 # :opponent_hand: The hand of the opponent

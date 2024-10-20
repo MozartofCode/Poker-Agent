@@ -2,14 +2,13 @@
 # @Language: Python
 # This is the main file for the poker simulation between two bots
 
-from gameplay import Game
+from gameplay import PokerEnv
 
 
 
 def main():
-
-    game = Game()
-    game.play()
+    
+    env = PokerEnv()
 
     
 

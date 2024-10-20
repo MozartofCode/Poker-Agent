@@ -5,6 +5,8 @@
 
 
 import random
+from monte_carlo_bot import Monte_Carlo_Bot
+from RL_bot import RL_Bot
 
 # value has to be a number assign Ace etc a number as well #TODO
 class Card:
@@ -27,25 +29,45 @@ class Card:
     def __hash__(self):
         return hash(self.suit) ^ hash(self.value)
 
+
 class Deck:
     def __init__(self):
         self.cards = []
         suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-        ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+        
+        # J -> 11, Q -> 12, K -> 13, A -> 14
+        ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']
         
         for suit in suits:
             for rank in ranks:
-                card = Card(suit, rank)
+                card = Card(suit, int(rank))
                 self.cards.append(card)
             
         random.shuffle(self.cards)
 
 
+    def draw_card(self):
+        return self.cards.pop()
+
 
 class PokerEnv:
+    
     def __init__(self):
-        # Initilize the deck, RL bot and monte carlo bot
-        return
+        
+        # Initialize the Deck and the players
+        self.deck = Deck()
+        self.monte_carlo_bot = Monte_Carlo_Bot(1000)
+        self.rl_bot = RL_Bot(1000)
 
-    def play(self):
-        return
+        # Setup the environment for the RL bot (actions, states, rewards etc...)
+        
+        
+
+
+
+        
+
+
+
+
+
