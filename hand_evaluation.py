@@ -15,10 +15,10 @@ def choose_winner(player1, player2):
     rankings = ["High Card", "Pair", "Two Pairs", "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind", "Straight Flush", "Royal Flush"]
     
     if rankings.index(result1) > rankings.index(result2):
-        return "Player 1 wins with " + result1
+        return True
     
     elif rankings.index(result1) < rankings.index(result2):
-        return "Player 2 wins with " + result2
+        return False
     
     else:
         #TODO: Implement tie breaker

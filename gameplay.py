@@ -21,6 +21,11 @@ class Card:
     def __str__(self):
         return self.value + " of " + self.suit
 
+    def __eq__(self, other):
+        return self.suit == other.suit and self.value == other.value
+    
+    def __hash__(self):
+        return hash(self.suit) ^ hash(self.value)
 
 class Deck:
     def __init__(self):
