@@ -23,10 +23,10 @@ def main():
     while  env.rl_bot.money > 0 and env.monte_carlo_bot.money > 0:
         
         if isMonteBB:
-            env.play_round(monte_carlo_bot, rl_bot)
+            env.play_round(True)
             isMonteBB = False
         else:
-            env.play_round(rl_bot, monte_carlo_bot)
+            env.play_round(False)
             isMonteBB = True
 
     print("The winner is:" + choose_winner(env.rl_bot, env.monte_carlo_bot))

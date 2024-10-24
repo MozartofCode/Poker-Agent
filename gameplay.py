@@ -60,6 +60,11 @@ class PokerEnv:
         # Initialize the Deck and the players
         self.monte_carlo_bot = Monte_Carlo_Bot(1000)
         self.rl_bot = RL_Bot(1000)
+        self.big_blind = 50
+        self.small_blind = 25
+        self.hand_count = 0 
+        self.pot = 0
+
         self.reset()
         # Setup the environment for the RL bot (actions, states, rewards etc...)
         
@@ -73,6 +78,7 @@ class PokerEnv:
         self.community_cards = []
         self.monte_carlo_bot_hand = []
         self.rl_bot_hand = []
+        self.pot = 0
 
         for i in range(4):
             self.rl_bot_hand.append(self.deck.draw_card())
@@ -138,6 +144,31 @@ class PokerEnv:
         self.deck.draw_card()  # Burn one card
         self.community_cards.append(self.deck.draw_card())
 
-    def play_round(self):
+    def play_round(self, blind):
+        # If True then Monte Carlo Bot is the Big Blind
+        # If False then RL Bot is the Big Blind
+
+        self.hand_count += 1
+
+        if self.hand_count % 50 == 0:
+            self.big_blind += 25
+            self.small_blind += 50
+        
+        # Monte Carlo Bot is the Big Blind
+        
+        if blind:
+
+            
+            return
+        
+        self.deal_flop()
+        
+        self.deal_turn()
+        
+        self.deal_river()
+
+
+
+
         return
     
