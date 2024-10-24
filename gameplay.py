@@ -138,4 +138,6 @@ class PokerEnv:
         self.deck.draw_card()  # Burn one card
         self.community_cards.append(self.deck.draw_card())
 
+    def play_round(self):
+        return
     
