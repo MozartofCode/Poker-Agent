@@ -9,7 +9,7 @@ from gameplay import Deck
 
 
 # This is the Monte Carlo Bot class
-class Monte_Carlo_Bot:
+class MonteCarloBot:
     
     def __init__(self, money, risk_factor=1.0):
         self.risk_factor = risk_factor
