@@ -63,6 +63,7 @@ class PokerEnv:
         self.small_blind = 25
         self.hand_count = 0 
         self.pot = 0
+        self.reset()
 
     
     def reset(self):
@@ -89,6 +90,12 @@ class PokerEnv:
     def deal_river(self):
         self.deck.draw_card()  # Burn one card
         self.community_cards.append(self.deck.draw_card())
+
+
+    def get_current_env(self):
+        # Environment format to feed into the Agent
+        return
+    
 
     def play_round(self, blind):
         # If True then Monte Carlo Bot is the Big Blind
