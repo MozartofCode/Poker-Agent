@@ -1,4 +1,3 @@
-# Poker-RL-Bot
+# Poker-Agent
 
-
-Texas-Hold'em Poker simulation between a reinforcement learning bot vs Monte Carlo Simulation Bot
+Texas-Hold'em Poker simulation between a Poker Multi-Agent Bot (CrewAI) vs Monte Carlo Simulation Bot
