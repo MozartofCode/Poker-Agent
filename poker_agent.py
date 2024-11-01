@@ -3,7 +3,9 @@
 #
 #
 #
-
+# CREW
+from crewai import Crew, Process
+from langchain_openai import ChatOpenAI
 from crewai import Agent, Task, Crew
 from pydantic import BaseModel
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
@@ -36,7 +38,6 @@ evaluate_situation = Agent(
     goal ="Poker Agent that plays Texas Hold'em Poker",
     background = "Poker",
     verbose=True,
-    allow_delegation=True,
     tools = []
 )
 
@@ -46,7 +47,6 @@ decide_move = Agent(
     goal ="Poker Agent that plays Texas Hold'em Poker",
     background = "Poker",
     verbose=True,
-    allow_delegation=True,
     tools = []
 )
 
@@ -56,7 +56,6 @@ decide_bet = Agent(
     goal ="Poker Agent that plays Texas Hold'em Poker",
     background = "Poker",
     verbose=True,
-    allow_delegation=True,
     tools = []
 )
 
@@ -65,11 +64,8 @@ return_decision = Agent(
     goal ="Poker Agent that plays Texas Hold'em Poker",
     background = "Poker",
     verbose=True,
-    allow_delegation=True,
     tools = []
 )
-
-
 
 
 # TASKS
@@ -112,10 +108,6 @@ decision = Task(
 )
 
 
-# CREW
-from crewai import Crew, Process
-from langchain_openai import ChatOpenAI
-
 # Define the crew with agents and tasks
 poker_crew = Crew(
     agents=[evaluate_situation, decide_move, decide_bet, return_decision],
@@ -128,9 +120,16 @@ poker_crew = Crew(
 # RUN
 
 poker_inputs = {
-    "event_city": "New York",
-    "event_date": "2022-12-12",
-    "event_type": "conference",
+    "agentBigBlind":"",
+    "gameTurn":"",
+    "pot":"",
+    "agentBet":"",
+    "playerBet":"",
+    "playerMoney":"",
+    "agentMoney":"",
+    "communityCards":"",
+    "playerHand":"",
+    "agentHand":"",
 }
 
 result = poker_crew.kickoff(inputs=poker_inputs)
