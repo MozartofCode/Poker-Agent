@@ -18,16 +18,16 @@ class MonteCarloBot:
     def make_decision(self, my_hand, opponent_hand, community_cards, pot_size):
         return make_decision(my_hand, opponent_hand, community_cards, pot_size, self.risk_factor)
     
-    def play_pre_flop(self):
+    def play_pre_flop(self, env):
         return 'Call/Check'
     
-    def play_flop(self):
+    def play_flop(self, env):
         return 'Call/Check'
     
-    def play_turn(self):
+    def play_turn(self, env):
         return 'Call/Check'
 
-    def play_river(self):
+    def play_river(self, env):
         return 'Call/Check'
 
 

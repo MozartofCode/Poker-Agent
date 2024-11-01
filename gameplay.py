@@ -73,6 +73,9 @@ class PokerEnv:
         self.community_cards = []
         self.monte_carlo_bot_hand = []
         self.agent_hand = []
+        self.game_turn = "pre-flop"
+        self.agent_bet = 0
+        self.monte_carlo_bot_bet = 0
 
         for i in range(4):
             self.agent_hand.append(self.deck.draw_card())
@@ -95,25 +98,35 @@ class PokerEnv:
 
     def get_current_env(self):
         # Environment format to feed into the Agent
-        return
-    
+        return {
+            "agentBigBlind": not self.big_blind,
+            "gameTurn": self.game_turn,
+            "pot": self.pot,
+            "agentBet": self.agent_bet,
+            "playerBet": self.monte_carlo_bot_bet,
+            "playerMoney": self.monte_carlo_bot.money,
+            "agentMoney": self.agent.money,
+            "communityCards": self.community_cards,
+            "playerHand": self.monte_carlo_bot_hand,
+            "agentHand": self.agent_hand
+        }
 
-    def play_round(self, blind):
-        # If True then Monte Carlo Bot is the Big Blind
-        # If False then RL Bot is the Big Blind
 
+    def play_round(self):
+
+        # Increasing the blinds (if necessary)
         self.hand_count += 1
 
         if self.hand_count % 50 == 0:
             self.big_blind += 25
             self.small_blind += 50
         
-        # Monte Carlo Bot is the Big Blind
         
+        # Monte Carlo Bot is the Big Blind
         if self.blind_monte:
 
             # Pre-flop: Agent starts first
-            
+
             # After Flop: Monte Carlo Bot starts first
             self.deal_flop()
             
