@@ -63,6 +63,7 @@ class PokerEnv:
         self.small_blind = 25
         self.hand_count = 0 
         self.pot = 0
+        self.blind_monte = True  # True if Monte Carlo Bot is the Big Blind
         self.reset()
 
     
@@ -109,18 +110,19 @@ class PokerEnv:
         
         # Monte Carlo Bot is the Big Blind
         
-        if blind:
+        if self.blind_monte:
+
+            # Pre-flop: Agent starts first
             
-            return
-        
-        self.deal_flop()
-        
-        self.deal_turn()
-        
-        self.deal_river()
+            # After Flop: Monte Carlo Bot starts first
+            self.deal_flop()
+            
+            # After Turn: Monte Carlo Bot starts first
+            self.deal_turn()
+            
+            # After River: Monte Carlo Bot starts first
+            self.deal_river()
 
 
-
-
-        return
+        self.big_monte = not self.big_monte
     

@@ -17,6 +17,18 @@ class MonteCarloBot:
 
     def make_decision(self, my_hand, opponent_hand, community_cards, pot_size):
         return make_decision(my_hand, opponent_hand, community_cards, pot_size, self.risk_factor)
+    
+    def play_pre_flop(self):
+        return 'Call/Check'
+    
+    def play_flop(self):
+        return 'Call/Check'
+    
+    def play_turn(self):
+        return 'Call/Check'
+
+    def play_river(self):
+        return 'Call/Check'
 
 
 # This is the implementation of the Monte Carlo Simulation on Texas Hold'em
