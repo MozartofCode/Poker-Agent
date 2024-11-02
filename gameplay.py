@@ -95,7 +95,22 @@ class PokerEnv:
         self.community_cards.append(self.deck.draw_card())
 
 
-    def get_current_env(self):
+    def get_current_env_agent(self):
+        # Environment format to feed into the Agent
+        return {
+            "agentBigBlind": not self.big_blind,
+            "gameTurn": self.game_turn,
+            "pot": self.pot,
+            "agentBet": self.agent_bet,
+            "playerBet": self.monte_carlo_bot_bet,
+            "playerMoney": self.monte_carlo_bot.money,
+            "agentMoney": self.agent.money,
+            "communityCards": self.community_cards,
+            "agentHand": self.agent_hand
+        }
+
+    
+    def get_current_env_bot(self):
         # Environment format to feed into the Agent
         return {
             "agentBigBlind": not self.big_blind,
@@ -107,13 +122,12 @@ class PokerEnv:
             "agentMoney": self.agent.money,
             "communityCards": self.community_cards,
             "playerHand": self.monte_carlo_bot_hand,
-            "agentHand": self.agent_hand
         }
     
 
     def round_updates_monte_first(self):
             
-            bot_move = self.monte_carlo_bot.play(self.get_current_env())
+            bot_move = self.monte_carlo_bot.play(self.get_current_env_bot())
 
             if bot_move == "fold":
                 return "agent"
@@ -122,7 +136,7 @@ class PokerEnv:
                 self.monte_carlo_bot_bet += int(bot_move.split("-$")[1])
 
             while True:
-                agent_move = self.agent.play(self.get_current_env())
+                agent_move = self.agent.play(self.get_current_env_agent())
 
                 if agent_move == "fold":
                     return "bot"
@@ -130,7 +144,7 @@ class PokerEnv:
                 elif "raise" in agent_move:
                     self.agent_bet += int(agent_move.split("-$")[1])
 
-                    bot_move = self.monte_carlo_bot.play(self.get_current_env())
+                    bot_move = self.monte_carlo_bot.play(self.get_current_env_bot())
 
                     if bot_move == "fold":
                         return "agent"
@@ -152,7 +166,7 @@ class PokerEnv:
 
     def round_updates_agent_first(self):
             
-            agent_move = self.agent.play(self.get_current_env())
+            agent_move = self.agent.play(self.get_current_env_agent())
 
             if agent_move == "fold":
                 return "agent"
@@ -161,7 +175,7 @@ class PokerEnv:
                 self.agent_bet += int(agent_move.split("-$")[1])
 
             while True:
-                bot_move = self.monte_carlo_bot.play(self.get_current_env())
+                bot_move = self.monte_carlo_bot.play(self.get_current_env_bot())
 
                 if bot_move == "fold":
                     return "agent"
@@ -169,7 +183,7 @@ class PokerEnv:
                 elif "raise" in bot_move:
                     self.monte_carlo_bot_bet += int(bot_move.split("-$")[1])
 
-                    agent_move = self.agent.play(self.get_current_env())
+                    agent_move = self.agent.play(self.get_current_env_agent())
 
                     if agent_move == "fold":
                         return "bot"
