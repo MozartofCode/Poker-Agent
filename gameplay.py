@@ -64,23 +64,23 @@ class PokerEnv:
             "playerBet": self.monte_carlo_bot_bet,
             "playerMoney": self.monte_carlo_bot.money,
             "agentMoney": self.agent.money,
-            "communityCards": self.community_cards,
-            "agentHand": self.agent_hand
+            "communityCards": [str(card) for card in self.community_cards],
+            "agentHand": [str(card) for card in self.agent_hand]
         }
 
     
     def get_current_env_bot(self):
         # Environment format to feed into the Agent
         return {
-            "agentBigBlind": not self.big_blind,
+            "agentBigBlind": not self.blind_monte,
             "gameTurn": self.game_turn,
             "pot": self.pot,
             "agentBet": self.agent_bet,
             "playerBet": self.monte_carlo_bot_bet,
             "playerMoney": self.monte_carlo_bot.money,
             "agentMoney": self.agent.money,
-            "communityCards": self.community_cards,
-            "playerHand": self.monte_carlo_bot_hand,
+            "communityCards": [str(card) for card in self.community_cards],
+            "playerHand": [str(card) for card in self.monte_carlo_bot_hand],
         }
     
     

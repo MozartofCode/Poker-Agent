@@ -32,7 +32,7 @@ class PokerAgent():
             role="Hand Evaluator Agent",
             goal="Evaluates players chances of winning based on their hand and the community cards",
             backstory="Specializing in Texas Holdem Poker hand evaluation, this agent uses statistical analysis,"
-                      "and calculates the exact chance of winning this hand based on the {community_Cards} and the {agentHand}",
+                      "and calculates the exact chance of winning this hand based on the {communityCards} and the {agentHand}",
             verbose=True,
             allow_delegation=False,
             tools =[scrape_tool, search_tool]
@@ -43,7 +43,7 @@ class PokerAgent():
             role="Decision Maker Agent",
             goal="Decides on a move for the agent to make in a Texas Hold'em Poker game",
             backstory="Specializing in Texas Holdem Poker decision making, this agent makes a decision of raising, calling, "
-                      "checking or folding while using probability and statistical analysis. This is based on {community_Cards}, {agentHand}, "
+                      "checking or folding while using probability and statistical analysis. This is based on {communityCards}, {agentHand}, "
                       "{agentMoney}, {playerMoney}, {pot}, {gameTurn}, {agentBet} and {playerBet}",
             verbose=True,
             allow_delegation=True,
@@ -79,7 +79,7 @@ class PokerAgent():
             description=(
                 "Make a move in the Texas Hold'em Poker game based on the current situation and the analysis of the situation. "
                 "The move can be raising, calling, checking, or folding and based on the positional play, the player can bluff as well based on the known "
-                "information. The known information includes the {communityCards}, {agentHand}, {agentMoney}, {playerMoney}, {pot}, {gameTurn}, {agentBet} and {playerBet}."
+                "information. The known information includes the {agentBigBlind}, {communityCards}, {agentHand}, {agentMoney}, {playerMoney}, {pot}, {gameTurn}, {agentBet} and {playerBet}."
             ),
             expected_output=(
                 "The move that the agent should make in the game in the format of a string. The move can be raising, calling, checking, or folding. "
@@ -88,20 +88,26 @@ class PokerAgent():
             agent=decide_move
         )
 
-
-
         # Define the crew with agents and tasks
         poker_crew = Crew(
-            agents=[evaluate_situation, decide_move, bluff_master],
+            agents=[evaluate_situation, bluff_master, decide_move],
             tasks=[analyze, make_move],
             manager_llm=ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7),
-            process=Process.sequentail,
+            process=Process.sequential,
             verbose=True
         )
 
         # RUN
-        
-        return poker_crew.kickoff(agentBigBlind=env["agentBigBlind"], 
-                                  gameTurn=env["gameTurn"], pot=env["pot"], agentBet=env["agentBet"], 
-                                  playerBet=env["playerBet"], playerMoney=env["playerMoney"], agentMoney=env["agentMoney"], 
-                                  communityCards=env["communityCards"], agentHand=env["agentHand"])
+        env_parameters = {
+            "agentBigBlind": env["agentBigBlind"],
+            "gameTurn": env["gameTurn"],
+            "pot": env["pot"],
+            "agentBet": env["agentBet"],
+            "playerBet": env["playerBet"],
+            "playerMoney": env["playerMoney"],
+            "agentMoney": env["agentMoney"],
+            "communityCards": env["communityCards"],
+            "agentHand": env["agentHand"]
+        }
+
+        return poker_crew.kickoff(inputs=env_parameters)
