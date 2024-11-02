@@ -10,9 +10,13 @@ def main():
     game = PokerEnv()
 
     while  game.agent.money > 0 and game.monte_carlo_bot.money > 0:
-        game.play_round(True)
-        game.blind_monte = not game.blind_monte
+        print("Starting the new round...\n")
 
+        game.play_round()
+
+        # Reseting the game
+        game.blind_monte = not game.blind_monte
+        game.reset()
     
     if game.agent.money == 0:
         print("Monte Carlo Bot Wins the game!")

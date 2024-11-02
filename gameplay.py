@@ -83,6 +83,19 @@ class PokerEnv:
             "playerHand": self.monte_carlo_bot_hand,
         }
     
+    
+    def __str__(self):
+        return (
+            f"Game Turn: {self.game_turn}\n"
+            f"Agent Hand: {[str(card) for card in self.agent_hand]}\n"
+            f"Bot Hand: {[str(card) for card in self.monte_carlo_bot_hand]}\n"
+            f"Community Cards: {[str(card) for card in self.community_cards]}\n"
+            f"Agent Bet: {self.agent_bet}\n"
+            f"Monte Carlo Bot Bet: {self.monte_carlo_bot_bet}\n"
+            f"Pot: {self.pot}\n"
+            f"Agent Money: {self.agent.money}\n"
+            f"Bot Money: {self.monte_carlo_bot.money}\n"
+        )
 
     def round_updates_monte_first(self):
             
@@ -164,6 +177,9 @@ class PokerEnv:
 
     # :return: winner of the round as 'agent' or 'bot'
     def play_round(self):
+        
+        print("HEREEEE")
+        print(self)
 
         # Increasing the blinds (if necessary)
         self.hand_count += 1
@@ -285,8 +301,3 @@ class PokerEnv:
                 return "agent"
             else:
                 return "bot"       
-
-
-
-    def __str__(self):
-        return

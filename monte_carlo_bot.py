@@ -5,7 +5,7 @@
 
 import random
 from hand_evaluation import choose_winner
-from gameplay import Deck
+from deck import Deck
 
 
 # This is the Monte Carlo Bot class
