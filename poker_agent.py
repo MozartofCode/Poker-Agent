@@ -23,11 +23,6 @@ os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
 search_tool = SerperDevTool()
 scrape_tool = ScrapeWebsiteTool()
 
-# Agent2 - Decide on a move based on the chances
-# Agent3 - Decide on a bet (if raising)
-# Agent4 - Return the move-bet to the environment
-
-
 # Created the class for this format for easier output/input from and for the agents
 
 class Move(BaseModel):
@@ -48,7 +43,7 @@ evaluate_situation = Agent(
     goal ="Evaluates players chances of winning based on their hand and the community cards",
     background = "Specializing in Texas Holdem Poker hand evaluation, this agent uses statistical analysis,"
                  "and calculates the exact chance of winning this hand based on the {community_Cards} and the {agentHand}",
-    verbose=False,
+    verbose=True,
     allow_delegation=False,
     tools = [scrape_tool, search_tool]
 )
@@ -56,28 +51,25 @@ evaluate_situation = Agent(
 
 decide_move = Agent(
     role= "Decision Maker Agent",
-    goal ="Poker Agent that plays Texas Hold'em Poker",
-    background = "Specializing in Texas Holdem Poker decision making, this agent uses statistical analysis,",
+    goal ="Decides on a move for the agent to make in a Texas Hold'em Poker game",
+    background = "Specializing in Texas Holdem Poker decision making, this agent makes a decision of raising, calling, "
+                 "checking or folding while using probability and statistical analysis. This is based on {community_Cards}, {agentHand}, "
+                 "{agentMoney}, {playerMoney}, {pot}, {gameTurn}, {agentBet} and {playerBet}",
     verbose=True,
+    allow_delegation=True,
     tools = [scrape_tool, search_tool]
 )
 
-
-decide_bet = Agent(
-    role= "PokerAgent",
-    goal ="Poker Agent that plays Texas Hold'em Poker",
-    background = "Poker",
+bluff_master = Agent(
+    role= "Bluff Strategy Agent",
+    goal ="Decides on bluffing or not based on the position in the game",
+    background = "Greatest Texas Hold'em poker strategist, this agent uses a combination of probability, psychology, statistics,"
+                 "and positional play in order to make the best decision on whether to bluff or not and how much to raise to bluff if bluffing",
     verbose=True,
-    tools = []
+    allow_delegation=True,
+    tools = [scrape_tool, search_tool]
 )
 
-return_decision = Agent(
-    role= "PokerAgent",
-    goal ="Poker Agent that plays Texas Hold'em Poker",
-    background = "Poker",
-    verbose=True,
-    tools = []
-)
 
 
 # TASKS
@@ -122,7 +114,7 @@ decision = Task(
 
 # Define the crew with agents and tasks
 poker_crew = Crew(
-    agents=[evaluate_situation, decide_move, decide_bet, return_decision],
+    agents=[evaluate_situation, decide_move],
     tasks=[analyze, make_move, bet],
     manager_llm=ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7),
     process=Process.hierarchical,
@@ -140,7 +132,6 @@ poker_inputs = {
     "playerMoney":"",
     "agentMoney":"",
     "communityCards":"",
-    "playerHand":"",
     "agentHand":"",
 }
 
