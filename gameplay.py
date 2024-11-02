@@ -3,52 +3,11 @@
 # 
 #
 
-
 import random
 from monte_carlo_bot import MonteCarloBot
 from poker_agent import PokerAgent
 from hand_evaluation import choose_winner
-
-# value has to be a number assign Ace etc a number as well #TODO
-class Card:
-    def __init__(self, suit, value):
-        self.suit = suit
-        self.value = value
-
-    def get_suit(self):
-        return self.suit
-
-    def get_value(self):
-        return self.value
-
-    def __str__(self):
-        return self.value + " of " + self.suit
-
-    def __eq__(self, other):
-        return self.suit == other.suit and self.value == other.value
-    
-    def __hash__(self):
-        return hash(self.suit) ^ hash(self.value)
-
-
-class Deck:
-    def __init__(self):
-        self.cards = []
-        suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-        
-        # J -> 11, Q -> 12, K -> 13, A -> 14
-        ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']
-        
-        for suit in suits:
-            for rank in ranks:
-                card = Card(suit, int(rank))
-                self.cards.append(card)
-            
-        random.shuffle(self.cards)
-
-
-    def draw_card(self):
-        return self.cards.pop()
+from deck import Deck
 
 
 class PokerEnv:
@@ -325,4 +284,9 @@ class PokerEnv:
             if choose_winner(self.agent_hand + self.community_cards, self.monte_carlo_bot_hand + self.community_cards):
                 return "agent"
             else:
-                return "bot"         
+                return "bot"       
+
+
+
+    def __str__(self):
+        return
