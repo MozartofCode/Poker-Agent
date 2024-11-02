@@ -140,18 +140,5 @@ class PokerAgent():
     def __init__(self, money):
         self.money = money
     
-    def play_pre_flop(self, env):
+    def play(self, env):
         return
-    
-    def play_flop(self, env):
-        return
-
-    def play_turn(self, env):
-        return
-
-    def play_river(self, env):
-        return
-    
-
-
-
