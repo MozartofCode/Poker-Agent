@@ -9,7 +9,6 @@ from monte_carlo_bot import MonteCarloBot
 from poker_agent import PokerAgent
 from hand_evaluation import choose_winner
 
-
 # value has to be a number assign Ace etc a number as well #TODO
 class Card:
     def __init__(self, suit, value):
@@ -313,8 +312,3 @@ class PokerEnv:
                 return "agent"
             else:
                 return "bot"         
-
-    
-
-        
-        

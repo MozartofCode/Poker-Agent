@@ -21,7 +21,8 @@ def choose_winner(player1, player2):
         return False
     
     else:
-        #TODO: Implement tie breaker
+        #TODO: Implement tie breaker for the future
+        # Any tie goes to player 1 for now
         return tie_breaker()
     
 
@@ -63,7 +64,7 @@ def evaluate_hand(hand):
 
 
 def tie_breaker():
-    return
+    return True
 
 
 def is_royal_flush(hand):
