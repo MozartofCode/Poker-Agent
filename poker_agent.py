@@ -3,11 +3,9 @@
 # This is a poker agent that plays Texas Hold'em Poker. 
 # It is a CrewAI powered AI bot that uses multiple agents to make decisions
 
-from crewai import Crew, Process
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
-from crewai import Agent, Task, Crew
-from pydantic import BaseModel
+from crewai import Agent, Task, Crew, Process
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 import warnings
 warnings.filterwarnings('ignore')
@@ -89,10 +87,10 @@ make_move = Task(
 
 # Define the crew with agents and tasks
 poker_crew = Crew(
-    agents=[evaluate_situation, decide_move],
+    agents=[evaluate_situation, decide_move, bluff_master],
     tasks=[analyze, make_move],
     manager_llm=ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7),
-    process=Process.hierarchical,
+    process=Process.sequentail,
     verbose=True
 )
 
