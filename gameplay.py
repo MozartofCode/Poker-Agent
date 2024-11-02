@@ -7,7 +7,7 @@
 import random
 from monte_carlo_bot import MonteCarloBot
 from poker_agent import PokerAgent
-#from poker_agent
+from hand_evaluation import choose_winner
 
 
 # value has to be a number assign Ace etc a number as well #TODO
@@ -77,7 +77,7 @@ class PokerEnv:
         self.agent_bet = 0
         self.monte_carlo_bot_bet = 0
 
-        for i in range(4):
+        for _ in range(2):
             self.agent_hand.append(self.deck.draw_card())
             self.monte_carlo_bot_hand.append(self.deck.draw_card())
         
@@ -110,9 +110,52 @@ class PokerEnv:
             "playerHand": self.monte_carlo_bot_hand,
             "agentHand": self.agent_hand
         }
+    
+
+    def round_updates_monte_big(self):
+            
+            bot_move = self.monte_carlo_bot.play_flop(self.get_current_env())
+
+            if bot_move == "fold":
+                return "agent"
+            
+            elif "raise" in bot_move: # raise-$50
+                self.monte_carlo_bot_bet += int(bot_move.split("-$")[1])
+
+            while True:
+                agent_move = self.agent.play_flop(self.get_current_env())
+
+                if agent_move == "fold":
+                    return "bot"
+                
+                elif "raise" in agent_move:
+                    self.agent_bet += int(agent_move.split("-$")[1])
+
+                    bot_move = self.monte_carlo_bot.play_flop(self.get_current_env())
+
+                    if bot_move == "fold":
+                        return "agent"
+                    
+                    elif bot_move == "call":
+                        self.monte_carlo_bot_bet = self.agent_bet
+                        return "continue"
+                    
+                    elif "raise" in bot_move:
+                        self.monte_carlo_bot_bet += int(bot_move.split("-$")[1])
+
+                elif agent_move == "call":
+                    self.agent_bet = self.monte_carlo_bot_bet
+                    return "continue"
+
+                elif agent_move == "check":
+                    return "continue"
+
+
 
     # :return: winner of the round as 'agent' or 'bot'
     def play_round(self):
+
+        self.blind_monte = not self.blind_monte
 
         # Increasing the blinds (if necessary)
         self.hand_count += 1
@@ -129,30 +172,52 @@ class PokerEnv:
 
             # Pre-flop: Agent starts first
 
-            while self.agent_bet != self.monte_carlo_bot_bet:
-                agent_move = self.agent.play_pre_flop(self.get_current_env())
-                if agent_move == "fold":
-                    return "bot"
-                elif agent_move == "call":
-                    self.agent_bet = self.monte_carlo_bot_bet
-                    bot_move = self.monte_carlo_bot.play_pre_flop(self.get_current_env())
-                    if bot_move == "fold":
-                        return "agent"
-                    elif bot_move == "check":
-                        break
-            
 
+        
+
+                    
+            
             # After Flop: Monte Carlo Bot starts first
             self.deal_flop()
+            
+            round_result = self.round_updates_monte_big()
+
+            if round_result == "agent":
+                return "agent"
+            
+            elif round_result == "bot":
+                return "bot"
             
             # After Turn: Monte Carlo Bot starts first
             self.deal_turn()
             
+            round_result = self.round_updates_monte_big()
+
+            if round_result == "agent":
+                return "agent"
+            
+            elif round_result == "bot":
+                return "bot"
+            
             # After River: Monte Carlo Bot starts first
             self.deal_river()
+            
+            round_result = self.round_updates_monte_big()
+
+            if round_result == "agent":
+                return "agent"
+            
+            elif round_result == "bot":
+                return "bot"
+            
+            if choose_winner(self.agent_hand + self.community_cards, self.monte_carlo_bot_hand + self.community_cards):
+                return "agent"
+            else:
+                return "bot"         
+
 
         # Agent is the Big Blind
         else:
             return
         
-        self.big_monte = not self.big_monte
+        
