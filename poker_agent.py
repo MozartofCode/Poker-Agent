@@ -10,11 +10,19 @@ from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 import warnings
 warnings.filterwarnings('ignore')
 import os
+from pydantic import BaseModel
+
 
 load_dotenv()
 openai_api_key = os.getenv('OPENAI_API_KEY')
 serper_api_key = os.getenv('SERPER_API_KEY')
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
+
+
+# Defining the output from the AI agent system
+class AgentMove(BaseModel):
+    move: str
+    amount: int
 
 
 class PokerAgent():
@@ -82,10 +90,11 @@ class PokerAgent():
                 "information. The known information includes the {agentBigBlind}, {communityCards}, {agentHand}, {agentMoney}, {playerMoney}, {pot}, {gameTurn}, {agentBet} and {playerBet}."
             ),
             expected_output=(
-                "The move that the agent should make in the game in the format of a string. The move can be raising, calling, checking, or folding. "
+                "The move that the agent should make in the game in the format of a string in ONE PHRASE ONLY. The move can be raising, calling, checking, or folding. "
                 "The output should be in the format: 'check', 'call', 'fold', or 'raise-$50' (where $50 is the amount to raise based on the current situation)."
             ),
-            agent=decide_move
+            agent=decide_move,
+            output_file=AgentMove
         )
 
         # Define the crew with agents and tasks
@@ -110,4 +119,9 @@ class PokerAgent():
             "agentHand": env["agentHand"]
         }
 
-        return poker_crew.kickoff(inputs=env_parameters)
+        result = poker_crew.kickoff(inputs=env_parameters)
+
+        if result["move"] != "raise":
+            return result["move"]
+        
+        return result["move"] + "-" + str(result["amount"])
